@@ -1,0 +1,49 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-config
+data:
+  nginx.conf: |
+    worker_processes 5;
+    error_log /var/log/nginx/error.log;
+    events { worker_connections 1024; }
+
+    http {
+      upstream bookshelf_service {
+        server 192.168.49.2:31001;
+        server 192.168.49.2:32112;
+        server 192.168.49.2:31221;
+        server 192.168.49.2:30110;
+        server 192.168.49.2:30101;
+
+        keepalive 120;
+      }
+
+      limit_req_zone $binary_remote_addr zone=bookshelf_service_zone:1m rate=100r/m;
+      limit_req_status 429;
+
+      server {
+        listen 80;
+        server_name 0.0.0.0;
+
+            location / {
+
+                limit_req zone=bookshelf_service_zone;
+
+                proxy_http_version 1.1;
+                proxy_pass http://bookshelf_service/;
+
+                proxy_buffering off;
+
+                proxy_set_header Host $host;
+                proxy_set_header Connection "upgrade";
+                proxy_set_header Upgrade $http_upgrade;
+
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-Host $host;
+                proxy_set_header X-Forwarded-Port $server_port;
+
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        }
+      }
+    }

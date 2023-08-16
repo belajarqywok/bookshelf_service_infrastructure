@@ -1,0 +1,36 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: nginx
+  labels:
+    name: nginx
+spec:
+  selector:
+    matchLabels:
+      name: nginx
+  template:
+    metadata:
+      name: nginx
+      labels:
+        name: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:stable-bullseye
+
+        volumeMounts:
+          - name: nginx-config-volume
+            mountPath: /etc/nginx/nginx.conf
+            subPath: nginx.conf
+            readOnly: true
+
+          - name: log
+            mountPath: /var/log/nginx
+
+        resources:
+          limits:
+            memory: "500Mi"
+            cpu: "1Gi"
+        
+        ports:
+        - containerPort: 80

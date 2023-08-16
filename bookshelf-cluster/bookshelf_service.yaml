@@ -1,0 +1,72 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: bookshelf_service-1
+spec:
+  type: NodePort
+  selector:
+    name: bookshelf
+  ports:
+    - port: 3000
+      targetPort: 3000
+      nodePort: 31001
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: bookshelf_service-2
+spec:
+  type: NodePort
+  selector:
+    name: bookshelf
+  ports:
+    - port: 3000
+      targetPort: 3000
+      nodePort: 32112
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: bookshelf_service-3
+spec:
+  type: NodePort
+  selector:
+    name: bookshelf
+  ports:
+    - port: 3000
+      targetPort: 3000
+      nodePort: 31221
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: bookshelf_service-4
+spec:
+  type: NodePort
+  selector:
+    name: bookshelf
+  ports:
+    - port: 3000
+      targetPort: 3000
+      nodePort: 30110
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: bookshelf_service-5
+spec:
+  type: NodePort
+  selector:
+    name: bookshelf
+  ports:
+    - port: 3000
+      targetPort: 3000
+      nodePort: 30101

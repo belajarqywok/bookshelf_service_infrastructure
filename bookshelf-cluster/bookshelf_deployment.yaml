@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bookshelf
+  labels:
+    name: bookshelf
+spec:
+  selector:
+    matchLabels:
+      name: bookshelf
+  template:
+    metadata:
+      name: bookshelf
+      labels:
+        name: bookshelf
+    spec:
+      containers:
+        - name: bookshelf
+          image: 172.18.0.1:5000/bookshelf:1.0
+          env:
+            # SRV ENV
+            - name:  SRV_HOST
+              value: $SRV_HOST
+
+            - name:  SRV_PORT
+              value: $SRV_PORT
+
+            # Rate Limit Env
+            - name:  MAX_LIMIT_REQ
+              value: $MAX_LIMIT_REQ
+
+            - name:  TIME_LIMIT_REQ
+              value: $TIME_LIMIT_REQ
+
+            # Auth Env
+            - name:  SECRET_KEY
+              value: $SECRET_KEY
+
+            - name:  ACCESS_TOKEN_EXPIRATION
+              value: $ACCESS_TOKEN_EXPIRATION
+
+            - name:  REFRESH_TOKEN_EXPIRATION
+              value: $REFRESH_TOKEN_EXPIRATION
+
+            - name:  JWT_ALGORITHM
+              value: $JWT_ALGORITHM
+
+            # Database Env
+            - name:  DATABASE_URL
+              value: $DATABASE_URL
+
+            # Caching Env
+            - name:  REDIS_HOST
+              value: $REDIS_HOST
+
+            - name:  REDIS_PORT
+              value: $REDIS_PORT
+
+            - name:  REDIS_PASSWORD
+              value: $REDIS_PASSWORD
+
+          resources:
+            limits:
+              memory: "500Mi"
+              cpu: "2Gi"
+
+          ports:
+            - containerPort: 3000
